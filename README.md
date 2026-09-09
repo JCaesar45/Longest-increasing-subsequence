@@ -3,6 +3,7 @@
 A luxury demonstration product for the longest increasing subsequence problem.
 
 ## Product Structure
+```
 aurelia-lis/
 ├─ index.html
 ├─ api/
@@ -14,7 +15,7 @@ aurelia-lis/
 ├─ docs/
 │  └─ architecture.md
 └─ README.md
-
+```
 ## Browser
 Open index.html in a modern browser. No build step is required.
 
