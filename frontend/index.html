@@ -1,0 +1,2218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aurelia LIS — Luxury Algorithm Studio</title>
+    <meta
+      name="description"
+      content="A luxury, high-converting single-file demonstration of the longest increasing subsequence algorithm with browser, Python, TypeScript, and Java assets."
+    />
+    <meta name="theme-color" content="#070510" />
+    <meta property="og:title" content="Aurelia LIS" />
+    <meta
+      property="og:description"
+      content="Longest increasing subsequence engineered as a flagship product."
+    />
+    <meta property="og:type" content="website" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Aurelia LIS",
+        "description": "A single-file luxury demonstration of the longest increasing subsequence algorithm with browser, Python, TypeScript, and Java reference implementations.",
+        "brand": {
+          "@type": "Brand",
+          "name": "Aurelia Atelier"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        --bg: #070510;
+        --bg-soft: #110a1f;
+        --panel: rgba(20, 14, 36, 0.74);
+        --panel-strong: rgba(29, 20, 50, 0.9);
+        --ink: #f8f3e7;
+        --muted: #b8af9f;
+        --gold: #d4af37;
+        --gold-soft: #f6e27a;
+        --violet: #7c3aed;
+        --line: rgba(212, 175, 55, 0.22);
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+        --radius: 24px;
+        --font-display:
+          "Didot", "Bodoni MT", "Playfair Display", "Georgia", serif;
+        --font-body:
+          "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        --font-mono:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--font-body);
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(124, 58, 237, 0.28),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at top right,
+            rgba(212, 175, 55, 0.18),
+            transparent 24%
+          ),
+          linear-gradient(
+            160deg,
+            #050309 0%,
+            var(--bg) 36%,
+            #12081f 68%,
+            #050309 100%
+          );
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.035) 1px,
+            transparent 1px
+          );
+        background-size: 42px 42px;
+        mask-image: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.65),
+          transparent 88%
+        );
+        opacity: 0.28;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
+      .skip-link:focus {
+        left: 12px;
+        top: 12px;
+        width: auto;
+        height: auto;
+        z-index: 100;
+        padding: 10px 14px;
+        background: var(--gold);
+        color: #171104;
+        border-radius: 10px;
+        text-decoration: none;
+      }
+
+      .shell {
+        width: min(1220px, 92vw);
+        margin-inline: auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(18px);
+        background: rgba(5, 3, 9, 0.62);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 18px 0;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        text-decoration: none;
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        letter-spacing: 0.08em;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: linear-gradient(
+          135deg,
+          rgba(246, 226, 122, 0.96),
+          rgba(212, 175, 55, 0.72)
+        );
+        color: #171104;
+        font-weight: 800;
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.14),
+          0 18px 40px rgba(212, 175, 55, 0.22);
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .nav-links a {
+        color: inherit;
+        text-decoration: none;
+        padding: 8px 0;
+        border-bottom: 1px solid transparent;
+        transition:
+          color 180ms ease,
+          border-color 180ms ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        color: var(--gold-soft);
+        border-color: rgba(246, 226, 122, 0.65);
+      }
+
+      .button {
+        appearance: none;
+        border: 1px solid rgba(246, 226, 122, 0.28);
+        border-radius: 999px;
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.96),
+          rgba(124, 58, 237, 0.84)
+        );
+        color: #171104;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        padding: 14px 22px;
+        cursor: pointer;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          filter 180ms ease;
+        box-shadow:
+          0 18px 50px rgba(124, 58, 237, 0.22),
+          0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+        box-shadow: 0 24px 60px rgba(212, 175, 55, 0.28);
+      }
+
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--ink);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .button-ghost {
+        background: transparent;
+        color: var(--gold-soft);
+        border: 1px solid rgba(246, 226, 122, 0.35);
+      }
+
+      .button-small {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+      }
+
+      .hero {
+        padding: 88px 0 34px;
+        position: relative;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 34px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--gold-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        font-size: 0.82rem;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: 0.015em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 7vw, 6.2rem);
+        line-height: 0.94;
+        max-width: 12ch;
+        text-wrap: balance;
+      }
+
+      .hero-copy p {
+        max-width: 68ch;
+        color: var(--muted);
+        font-size: 1.06rem;
+        line-height: 1.75;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin: 28px 0 34px;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .hero-stats div {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-stats dt {
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        margin-bottom: 8px;
+      }
+
+      .hero-stats dd {
+        margin: 0;
+        font-size: 1.4rem;
+        color: var(--gold-soft);
+        font-family: var(--font-display);
+      }
+
+      .hero-panel {
+        position: relative;
+        min-height: 500px;
+        display: grid;
+        place-items: center;
+      }
+
+      .orb {
+        position: absolute;
+        width: min(42vw, 460px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background:
+          radial-gradient(
+            circle at 30% 25%,
+            rgba(246, 226, 122, 0.95),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 70% 65%,
+            rgba(124, 58, 237, 0.78),
+            transparent 34%
+          ),
+          linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.22),
+            rgba(255, 255, 255, 0.02)
+          );
+        filter: saturate(1.15);
+        opacity: 0.82;
+        animation: float 8s ease-in-out infinite alternate;
+        box-shadow:
+          0 60px 120px rgba(0, 0, 0, 0.4),
+          0 0 120px rgba(212, 175, 55, 0.16);
+      }
+
+      .monotone-card {
+        position: relative;
+        z-index: 1;
+        width: min(88%, 420px);
+        padding: 28px;
+        border-radius: 30px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.12),
+          rgba(255, 255, 255, 0.03)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(20px);
+        transform: rotate(3deg);
+      }
+
+      .monotone-card h2 {
+        margin: 0 0 12px;
+        font-size: 1.5rem;
+      }
+
+      .monotone-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .monotone-card code {
+        display: block;
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.28);
+        color: var(--gold-soft);
+        font-family: var(--font-mono);
+        font-size: 0.94rem;
+        white-space: pre-wrap;
+      }
+
+      .section {
+        padding: 46px 0;
+      }
+
+      .section-heading {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: end;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .section-heading p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        max-width: 70ch;
+        line-height: 1.65;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 24px;
+        backdrop-filter: blur(18px);
+      }
+
+      .studio-grid {
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 22px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--gold-soft);
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      textarea,
+      input[type="email"] {
+        width: 100%;
+        resize: vertical;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.24);
+        color: var(--ink);
+        border-radius: 18px;
+        padding: 16px;
+        font: inherit;
+        outline: none;
+        transition:
+          border-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      textarea:focus-visible,
+      input[type="email"]:focus-visible {
+        border-color: rgba(246, 226, 122, 0.7);
+        box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+      }
+
+      textarea {
+        min-height: 160px;
+        font-family: var(--font-mono);
+        line-height: 1.6;
+      }
+
+      .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .status {
+        min-height: 1.4em;
+        color: var(--muted);
+        margin: 16px 0 0;
+        line-height: 1.5;
+      }
+
+      .result-output {
+        display: block;
+        margin: 14px 0 18px;
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.26);
+        border: 1px solid rgba(246, 226, 122, 0.22);
+        font-family: var(--font-mono);
+        font-size: 1.1rem;
+        color: var(--gold-soft);
+        min-height: 60px;
+        word-break: break-word;
+      }
+
+      .visualization {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        min-height: 240px;
+        padding: 30px 18px 16px;
+        border-radius: 20px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.03),
+            rgba(255, 255, 255, 0.015)
+          ),
+          rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        overflow-x: auto;
+      }
+
+      .bar {
+        position: relative;
+        flex: 1 0 34px;
+        min-width: 34px;
+        border-radius: 14px 14px 4px 4px;
+        background: linear-gradient(
+          180deg,
+          rgba(124, 58, 237, 0.72),
+          rgba(255, 255, 255, 0.08)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition:
+          transform 220ms ease,
+          background 220ms ease,
+          box-shadow 220ms ease;
+        transform-origin: bottom center;
+      }
+
+      .bar:hover {
+        transform: scaleY(1.04);
+      }
+
+      .bar.lis {
+        background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+        box-shadow: 0 0 36px rgba(212, 175, 55, 0.34);
+      }
+
+      .bar-label {
+        position: absolute;
+        top: -24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.82rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .tab-shell {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.16);
+        border-radius: 26px;
+        overflow: hidden;
+      }
+
+      .tab-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .tab-button {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font: inherit;
+        transition:
+          color 180ms ease,
+          background 180ms ease,
+          border-color 180ms ease;
+      }
+
+      .tab-button.active {
+        color: #171104;
+        background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+        border-color: transparent;
+        font-weight: 700;
+      }
+
+      .tab-panel {
+        display: none;
+        padding: 18px;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .panel-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .codebox {
+        margin: 0;
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(3, 2, 7, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        overflow: auto;
+        max-height: 620px;
+        color: #d8e0ff;
+        font-family: var(--font-mono);
+        font-size: 0.92rem;
+        line-height: 1.55;
+        white-space: pre;
+        tab-size: 2;
+      }
+
+      .structure-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 22px;
+      }
+
+      .structure-grid pre {
+        margin: 0;
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(3, 2, 7, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        overflow: auto;
+        color: #d8e0ff;
+        font-family: var(--font-mono);
+        line-height: 1.55;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 20px;
+      }
+
+      caption {
+        text-align: left;
+        color: var(--muted);
+        padding: 0 0 14px;
+      }
+
+      th,
+      td {
+        padding: 13px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--gold-soft);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      td {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .pass {
+        color: #8ef5b9;
+        font-weight: 700;
+      }
+
+      .fail {
+        color: #ff9c9c;
+        font-weight: 700;
+      }
+
+      .notes {
+        display: grid;
+        gap: 18px;
+      }
+
+      .notes article {
+        padding: 20px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .notes h3 {
+        margin: 0 0 10px;
+        font-size: 1.25rem;
+      }
+
+      .notes p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .references {
+        margin: 18px 0 0;
+        padding-left: 20px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .cta-panel {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 22px;
+        align-items: center;
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(212, 175, 55, 0.18),
+            transparent 32%
+          ),
+          var(--panel-strong);
+      }
+
+      .cta-copy h2 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 1.02;
+      }
+
+      .cta-copy p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .footer {
+        padding: 32px 0 48px;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .footer .shell {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 22px;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%) translateY(18px);
+        z-index: 60;
+        opacity: 0;
+        pointer-events: none;
+        background: rgba(8, 5, 14, 0.94);
+        color: var(--ink);
+        border: 1px solid rgba(246, 226, 122, 0.35);
+        box-shadow: var(--shadow);
+        border-radius: 999px;
+        padding: 13px 18px;
+        transition:
+          opacity 220ms ease,
+          transform 220ms ease;
+        max-width: min(92vw, 680px);
+        text-align: center;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @media (max-width: 1080px) {
+        .hero-grid,
+        .studio-grid,
+        .structure-grid,
+        .cta-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-panel {
+          min-height: 360px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero {
+          padding-top: 56px;
+        }
+
+        .hero-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .section {
+          padding: 34px 0;
+        }
+
+        .panel {
+          padding: 18px;
+        }
+
+        .codebox {
+          max-height: 460px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .orb,
+        .bar,
+        .button,
+        .toast {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+
+      @keyframes float {
+        from {
+          transform: translateY(0px) rotate(0deg);
+        }
+        to {
+          transform: translateY(-22px) rotate(3deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header">
+      <nav class="nav shell" aria-label="Primary">
+        <a class="brand" href="#top">
+          <span class="brand-mark">A</span>
+          Aurelia LIS
+        </a>
+
+        <div class="nav-links">
+          <a href="#studio">Studio</a>
+          <a href="#assets">Backend Assets</a>
+          <a href="#structure">Product Structure</a>
+          <a href="#verification">Verification</a>
+          <a href="#method">Methodology</a>
+        </div>
+
+        <button class="button button-small" type="button" data-scroll="#cta">
+          Request Access
+        </button>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              Algorithmic luxury · Conversion-ready engineering
+            </p>
+            <h1>
+              Longest Increasing Subsequence, presented as a flagship product.
+            </h1>
+            <p>
+              Aurelia LIS converts a classical dynamic-programming problem into
+              a polished commercial surface: an interactive browser studio,
+              deterministic reconstruction, embedded backend reference code,
+              verification fixtures, and a generated README for immediate
+              handoff.
+            </p>
+
+            <div class="hero-actions">
+              <button class="button" type="button" data-scroll="#studio">
+                Launch Studio
+              </button>
+              <button
+                class="button button-secondary"
+                type="button"
+                data-scroll="#assets"
+              >
+                Inspect Backend
+              </button>
+              <button
+                class="button button-ghost"
+                type="button"
+                id="downloadReadme"
+              >
+                Download README
+              </button>
+            </div>
+
+            <dl class="hero-stats">
+              <div>
+                <dt>Core contract</dt>
+                <dd>POST /api/lis</dd>
+              </div>
+              <div>
+                <dt>Runtime targets</dt>
+                <dd>Browser · Py · TS · JVM</dd>
+              </div>
+              <div>
+                <dt>Delivery model</dt>
+                <dd>Single-file showcase</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="hero-panel" aria-hidden="true">
+            <div class="orb"></div>
+            <div class="monotone-card">
+              <h2>Signature fixture</h2>
+              <p>
+                The studio opens with a canonical sequence and reconstructs a
+                maximal monotone chain.
+              </p>
+              <code>[3, 10, 2, 1, 20] → [3, 10, 20]</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="studio" class="section">
+        <div class="shell">
+          <header class="section-heading">
+            <div>
+              <h2>Algorithm Studio</h2>
+              <p>
+                Enter a numeric array as JSON or comma-separated values. The
+                studio computes the longest increasing subsequence, renders the
+                selected indices, and exposes the result for copy operations.
+              </p>
+            </div>
+          </header>
+
+          <div class="studio-grid">
+            <form id="sequenceForm" class="panel" novalidate>
+              <label for="sequenceInput">Sequence input</label>
+              <textarea
+                id="sequenceInput"
+                name="sequenceInput"
+                spellcheck="false"
+                aria-describedby="studioStatus"
+              >
+[0, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]</textarea>
+
+              <div class="form-actions">
+                <button class="button" type="submit">Compute</button>
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  id="sampleButton"
+                >
+                  Load Showcase Fixture
+                </button>
+                <button
+                  class="button button-ghost"
+                  type="button"
+                  id="copyResultButton"
+                >
+                  Copy Result
+                </button>
+              </div>
+
+              <p id="studioStatus" class="status" role="status"></p>
+            </form>
+
+            <div class="panel">
+              <h2>Result</h2>
+              <output
+                id="resultOutput"
+                class="result-output"
+                aria-live="polite"
+              >
+                []
+              </output>
+              <div
+                id="viz"
+                class="visualization"
+                aria-label="Sequence visualization"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="assets" class="section">
+        <div class="shell">
+          <header class="section-heading">
+            <div>
+              <h2>Embedded Backend Assets</h2>
+              <p>
+                Python, TypeScript, and Java reference implementations share the
+                same request and response contract: accept a finite numeric
+                array and return a longest increasing subsequence.
+              </p>
+            </div>
+          </header>
+
+          <div class="tab-shell">
+            <div
+              class="tab-list"
+              role="tablist"
+              aria-label="Backend code assets"
+            >
+              <button
+                class="tab-button active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                data-tab="python"
+              >
+                Python
+              </button>
+              <button
+                class="tab-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-tab="typescript"
+              >
+                TypeScript
+              </button>
+              <button
+                class="tab-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-tab="java"
+              >
+                Java
+              </button>
+              <button
+                class="tab-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-tab="readme"
+              >
+                README Script
+              </button>
+            </div>
+
+            <section class="tab-panel active" id="panel-python" role="tabpanel">
+              <div class="panel-actions">
+                <button
+                  class="button button-small copy-code"
+                  type="button"
+                  data-copy="python"
+                >
+                  Copy Python
+                </button>
+              </div>
+              <pre class="codebox"><code id="code-python"></code></pre>
+            </section>
+
+            <section class="tab-panel" id="panel-typescript" role="tabpanel">
+              <div class="panel-actions">
+                <button
+                  class="button button-small copy-code"
+                  type="button"
+                  data-copy="typescript"
+                >
+                  Copy TypeScript
+                </button>
+              </div>
+              <pre class="codebox"><code id="code-typescript"></code></pre>
+            </section>
+
+            <section class="tab-panel" id="panel-java" role="tabpanel">
+              <div class="panel-actions">
+                <button
+                  class="button button-small copy-code"
+                  type="button"
+                  data-copy="java"
+                >
+                  Copy Java
+                </button>
+              </div>
+              <pre class="codebox"><code id="code-java"></code></pre>
+            </section>
+
+            <section class="tab-panel" id="panel-readme" role="tabpanel">
+              <div class="panel-actions">
+                <button
+                  class="button button-small copy-code"
+                  type="button"
+                  data-copy="readme"
+                >
+                  Copy README
+                </button>
+              </div>
+              <pre class="codebox"><code id="code-readme"></code></pre>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="structure" class="section">
+        <div class="shell">
+          <header class="section-heading">
+            <div>
+              <h2>Product Structure</h2>
+              <p>
+                The single-file presentation can be exported directly into this
+                repository layout. Each backend asset maps to a dedicated
+                service folder, while the browser artifact remains the showcase
+                entry point.
+              </p>
+            </div>
+          </header>
+
+          <div class="structure-grid">
+            <pre aria-label="Repository structure">
+aurelia-lis/
+├─ index.html
+├─ README.md
+├─ api/
+│  ├─ python_fastapi.py
+│  ├─ typescript_node.ts
+│  └─ java_lis_server.java
+├─ core/
+│  └─ lis_contract.md
+├─ docs/
+│  └─ architecture.md
+└─ fixtures/
+   └─ canonical_sequences.json</pre>
+
+            <div class="panel">
+              <h2>Deployment notes</h2>
+              <p class="status">
+                The browser module requires no build step. The Python service
+                targets FastAPI with Uvicorn. The TypeScript service targets
+                Node.js with built-in HTTP primitives. The Java service uses the
+                JDK HTTP server, avoiding external dependencies for the
+                reference implementation.
+              </p>
+              <div class="form-actions">
+                <button class="button" type="button" data-scroll="#cta">
+                  Position for enterprise review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="verification" class="section">
+        <div class="shell">
+          <header class="section-heading">
+            <div>
+              <h2>Verification Matrix</h2>
+              <p>
+                The page executes a deterministic fixture suite on load. The
+                same fixtures can be reused in CI pipelines for browser and
+                server implementations.
+              </p>
+            </div>
+          </header>
+
+          <div class="panel">
+            <table>
+              <caption>Browser fixture results</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Fixture</th>
+                  <th scope="col">Expected</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="testsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="method" class="section">
+        <div class="shell">
+          <header class="section-heading">
+            <div>
+              <h2>Methodology and Sources</h2>
+              <p>
+                Design decisions are recorded here so reviewers can audit the
+                reasoning without relying on unstated assumptions.
+              </p>
+            </div>
+          </header>
+
+          <div class="notes">
+            <article>
+              <h3>Algorithm selection</h3>
+              <p>
+                Dynamic programming was chosen for explicit parent
+                reconstruction and deterministic tie handling. The recurrence
+                stores L[i] = 1 + max L[j] for all j &lt; i where input[j] &lt;
+                input[i]. When multiple predecessors yield the same length, the
+                later predecessor is retained. This tie rule favors lower tail
+                values and aligns with the showcase fixture set.
+              </p>
+            </article>
+
+            <article>
+              <h3>Interface architecture</h3>
+              <p>
+                The presentation layer is deliberately consolidated into one
+                HTML document. This minimizes deployment friction, preserves
+                portability, and demonstrates that advanced interaction design
+                can be delivered without a build pipeline. Embedded backend code
+                is exposed as copyable source assets rather than executed in the
+                browser, because browser sandboxes do not host Python or JVM
+                processes.
+              </p>
+            </article>
+
+            <article>
+              <h3>Verification posture</h3>
+              <p>
+                The embedded test matrix checks function presence, return type,
+                and exact fixture outputs. The fixture set includes sequences
+                with multiple candidate subsequences so reconstruction behavior
+                is observable rather than implied.
+              </p>
+            </article>
+
+            <article>
+              <h3>References</h3>
+              <ul class="references">
+                <li>
+                  Aldous, D., &amp; Diaconis, P. (1999). Longest increasing
+                  subsequences: from patience sorting to the
+                  Baik–Deift–Johansson theorem.
+                  <em>Bulletin of the American Mathematical Society, 36</em>
+                  (4), 413–432.
+                </li>
+                <li>
+                  Cormen, T. H., Leiserson, C. E., Rivest, R. L., &amp; Stein,
+                  C. (2022).
+                  <em>Introduction to algorithms</em>
+                  (4th ed.). MIT Press.
+                </li>
+                <li>
+                  Ecma International. (2024).
+                  <em>ECMAScript 2024 language specification</em>
+                  . https://tc39.es/ecma262/
+                </li>
+                <li>
+                  Microsoft. (2026).
+                  <em>TypeScript documentation</em>
+                  . https://www.typescriptlang.org/docs/
+                </li>
+                <li>
+                  Oracle. (2026).
+                  <em>Java SE 21 documentation</em>
+                  . https://docs.oracle.com/en/java/javase/21/
+                </li>
+                <li>
+                  Python Software Foundation. (2026).
+                  <em>Python 3.13 documentation</em>
+                  . https://docs.python.org/3/
+                </li>
+                <li>
+                  WHATWG. (2026).
+                  <em>HTML Living Standard</em>
+                  . https://html.spec.whatwg.org/
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="cta" class="section">
+        <div class="shell">
+          <div class="panel cta-panel">
+            <div class="cta-copy">
+              <h2>Bring this level of finish to your next product review.</h2>
+              <p>
+                Leave an access request for the enterprise edition: CI harness,
+                contract tests, observability hooks, and deployment manifests
+                for Python, TypeScript, and Java services.
+              </p>
+            </div>
+
+            <form id="ctaForm" class="panel" novalidate>
+              <label for="ctaEmail">Work email</label>
+              <input
+                id="ctaEmail"
+                name="ctaEmail"
+                type="email"
+                autocomplete="email"
+                placeholder="name@company.com"
+                required
+              />
+              <div class="form-actions">
+                <button class="button" type="submit">
+                  Request Private Demo
+                </button>
+                <button
+                  class="button button-secondary"
+                  type="button"
+                  data-scroll="#top"
+                >
+                  Back to top
+                </button>
+              </div>
+              <p class="status" id="ctaStatus" role="status"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell">
+        <span>Aurelia LIS — single-file showcase.</span>
+        <span>
+          HTML + CSS + JavaScript consolidated in one operative artifact.
+        </span>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      "use strict";
+
+      const PYTHON_CODE = `# aurelia_lis.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field, field_validator
+from typing import List
+import math
+
+app = FastAPI(
+    title="Aurelia LIS API",
+    description="Luxury-grade longest increasing subsequence endpoint.",
+    version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+
+class SequenceRequest(BaseModel):
+    values: List[float] = Field(..., min_length=1)
+
+    @field_validator("values")
+    @classmethod
+    def validate_values(cls, values: List[float]) -> List[float]:
+        if any(not math.isfinite(value) for value in values):
+            raise ValueError("values must contain finite numbers")
+        return values
+
+
+def find_sequence(values: List[float]) -> List[float]:
+    n = len(values)
+    if n == 0:
+        return []
+
+    lengths = [1] * n
+    parents = [-1] * n
+    best_index = 0
+
+    for i in range(n):
+        for j in range(i):
+            if values[j] < values[i] and lengths[j] + 1 >= lengths[i]:
+                lengths[i] = lengths[j] + 1
+                parents[i] = j
+
+        if lengths[i] >= lengths[best_index]:
+            best_index = i
+
+    result = []
+    current = best_index
+    while current != -1:
+        result.append(values[current])
+        current = parents[current]
+
+    return result[::-1]
+
+
+@app.get("/healthz")
+def healthz() -> dict:
+    return {"status": "ok"}
+
+
+@app.post("/api/lis")
+def lis(payload: SequenceRequest) -> dict:
+    result = find_sequence(payload.values)
+    return {"result": result, "length": len(result)}
+`;
+
+      const TYPESCRIPT_CODE = `import { createServer, IncomingMessage, ServerResponse } from "node:http";
+
+type SequenceRequest = {
+  values: number[];
+};
+
+function findSequence(values: number[]): number[] {
+  const n = values.length;
+  if (n === 0) return [];
+
+  const lengths = new Array<number>(n).fill(1);
+  const parents = new Array<number>(n).fill(-1);
+  let bestIndex = 0;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < i; j++) {
+      if (values[j] < values[i] && lengths[j] + 1 >= lengths[i]) {
+        lengths[i] = lengths[j] + 1;
+        parents[i] = j;
+      }
+    }
+
+    if (lengths[i] >= lengths[bestIndex]) {
+      bestIndex = i;
+    }
+  }
+
+  const result: number[] = [];
+  let current = bestIndex;
+
+  while (current !== -1) {
+    result.push(values[current]);
+    current = parents[current];
+  }
+
+  return result.reverse();
+}
+
+function readBody(request: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let body = "";
+
+    request.on("data", (chunk: Buffer) => {
+      body += chunk.toString("utf8");
+    });
+
+    request.on("end", () => resolve(body));
+    request.on("error", reject);
+  });
+}
+
+function sendJson(response: ServerResponse, status: number, payload: unknown): void {
+  const body = JSON.stringify(payload);
+
+  response.writeHead(status, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": Buffer.byteLength(body),
+  });
+
+  response.end(body);
+}
+
+function parseSequence(body: string): SequenceRequest {
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    throw new Error("Invalid JSON");
+  }
+
+  const values = (parsed as SequenceRequest).values;
+
+  if (!Array.isArray(values) || values.length === 0) {
+    throw new Error("values must be a non-empty array");
+  }
+
+  for (const value of values) {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      throw new Error("values must contain finite numbers");
+    }
+  }
+
+  return { values };
+}
+
+const server = createServer(async (request, response) => {
+  const url = new URL(request.url ?? "/", "http://localhost");
+
+  if (url.pathname === "/healthz" && request.method === "GET") {
+    sendJson(response, 200, { status: "ok" });
+    return;
+  }
+
+  if (url.pathname === "/api/lis" && request.method === "POST") {
+    try {
+      const body = await readBody(request);
+      const payload = parseSequence(body);
+      const result = findSequence(payload.values);
+      sendJson(response, 200, { result, length: result.length });
+    } catch (error) {
+      sendJson(response, 400, {
+        error: error instanceof Error ? error.message : "Bad request"
+      });
+    }
+    return;
+  }
+
+  sendJson(response, 404, { error: "Not found" });
+});
+
+server.listen(8080, () => {
+  console.log("Aurelia LIS TypeScript API listening on http://localhost:8080");
+});
+`;
+
+      const JAVA_CODE = `import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public final class LisServer {
+
+    public static void main(String[] args) throws Exception {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+
+        server.createContext("/healthz", exchange -> {
+            if (!"GET".equals(exchange.getRequestMethod())) {
+                sendJson(exchange, 405, """
+                        {"error":"Method not allowed"}
+                        """);
+                return;
+            }
+
+            sendJson(exchange, 200, """
+                    {"status":"ok"}
+                    """);
+        });
+
+        server.createContext("/api/lis", exchange -> {
+            if (!"POST".equals(exchange.getRequestMethod())) {
+                sendJson(exchange, 405, """
+                        {"error":"Method not allowed"}
+                        """);
+                return;
+            }
+
+            try {
+                String body = readBody(exchange.getRequestBody());
+                List<Double> values = parseValues(body);
+
+                if (values.isEmpty()) {
+                    throw new IllegalArgumentException("values must not be empty");
+                }
+
+                List<Double> result = findSequence(values);
+                sendJson(exchange, 200, toJson(result));
+            } catch (Exception error) {
+                sendJson(exchange, 400, """
+                        {"error":"Bad request"}
+                        """);
+            }
+        });
+
+        server.start();
+        System.out.println("Aurelia LIS Java API listening on http://localhost:8080");
+    }
+
+    static List<Double> findSequence(List<Double> values) {
+        int n = values.size();
+        int[] lengths = new int[n];
+        int[] parents = new int[n];
+
+        Arrays.fill(lengths, 1);
+        Arrays.fill(parents, -1);
+
+        int bestIndex = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (values.get(j) < values.get(i) && lengths[j] + 1 >= lengths[i]) {
+                    lengths[i] = lengths[j] + 1;
+                    parents[i] = j;
+                }
+            }
+
+            if (lengths[i] >= lengths[bestIndex]) {
+                bestIndex = i;
+            }
+        }
+
+        List<Double> result = new ArrayList<>();
+        int current = bestIndex;
+
+        while (current != -1) {
+            result.add(values.get(current));
+            current = parents[current];
+        }
+
+        Collections.reverse(result);
+        return result;
+    }
+
+    static List<Double> parseValues(String body) {
+        int start = body.indexOf('[');
+        int end = body.lastIndexOf(']');
+
+        if (start < 0 || end < 0 || end <= start) {
+            throw new IllegalArgumentException("Missing values array");
+        }
+
+        String inner = body.substring(start + 1, end).trim();
+
+        if (inner.isEmpty()) {
+            throw new IllegalArgumentException("values must not be empty");
+        }
+
+        List<Double> values = new ArrayList<>();
+
+        for (String part : inner.split(",")) {
+            values.add(Double.parseDouble(part.trim()));
+        }
+
+        return values;
+    }
+
+    static String readBody(InputStream input) throws IOException {
+        return new String(input.readAllBytes(), StandardCharsets.UTF_8);
+    }
+
+    static String toJson(List<Double> result) {
+        char quote = '"';
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('{')
+               .append(quote).append("result").append(quote)
+               .append(": [");
+
+        for (int i = 0; i < result.size(); i++) {
+            if (i > 0) {
+                builder.append(',');
+            }
+
+            builder.append(result.get(i));
+        }
+
+        builder.append("], ")
+               .append(quote).append("length").append(quote)
+               .append(": ")
+               .append(result.size())
+               .append('}');
+
+        return builder.toString();
+    }
+
+    static void sendJson(HttpExchange exchange, int status, String body) throws IOException {
+        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+
+        exchange.getResponseHeaders().set("Content-Type", "application/json; charset=utf-8");
+        exchange.sendResponseHeaders(status, bytes.length);
+
+        try (OutputStream output = exchange.getResponseBody()) {
+            output.write(bytes);
+        }
+    }
+}
+`;
+
+      function generateREADME() {
+        return [
+          "# Aurelia LIS",
+          "",
+          "A luxury demonstration product for the longest increasing subsequence problem.",
+          "",
+          "## Product Structure",
+          "aurelia-lis/",
+          "├─ index.html",
+          "├─ api/",
+          "│  ├─ python_fastapi.py",
+          "│  ├─ typescript_node.ts",
+          "│  └─ java_lis_server.java",
+          "├─ core/",
+          "│  └─ lis_contract.md",
+          "├─ docs/",
+          "│  └─ architecture.md",
+          "└─ README.md",
+          "",
+          "## Browser",
+          "Open index.html in a modern browser. No build step is required.",
+          "",
+          "## Python API",
+          "python -m venv .venv",
+          "source .venv/bin/activate",
+          "pip install fastapi uvicorn",
+          "uvicorn python_fastapi:app --reload --port 8000",
+          "",
+          "## TypeScript API",
+          "npm install typescript @types/node --save-dev",
+          "npx tsc typescript_node.ts --module nodenext --target es2022",
+          "node typescript_node.js",
+          "",
+          "## Java API",
+          "javac java_lis_server.java",
+          "java LisServer",
+          "",
+          "## Endpoint",
+          "POST /api/lis",
+          'Body: {"values":[3,10,2,1,20]}',
+          'Response: {"result":[3,10,20],"length":3}',
+          "",
+          "## References",
+          "Aldous, D., & Diaconis, P. (1999). Longest increasing subsequences: from patience sorting to the Baik-Deift-Johansson theorem. Bulletin of the American Mathematical Society, 36(4), 413-432.",
+          "Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2022). Introduction to algorithms (4th ed.). MIT Press.",
+          "Ecma International. (2024). ECMAScript 2024 language specification. https://tc39.es/ecma262/",
+          "Microsoft. (2026). TypeScript documentation. https://www.typescriptlang.org/docs/",
+          "Oracle. (2026). Java SE 21 documentation. https://docs.oracle.com/en/java/javase/21/",
+          "Python Software Foundation. (2026). Python 3.13 documentation. https://docs.python.org/3/",
+          "WHATWG. (2026). HTML Living Standard. https://html.spec.whatwg.org/",
+          ""
+        ].join("\n");
+      }
+
+      function computeLIS(values) {
+        if (!Array.isArray(values) || values.length === 0) {
+          return {
+            values: [],
+            indices: [],
+            lengths: [],
+            parents: [],
+            bestIndex: -1
+          };
+        }
+
+        const n = values.length;
+        const lengths = new Array(n).fill(1);
+        const parents = new Array(n).fill(-1);
+        let bestIndex = 0;
+
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < i; j++) {
+            if (values[j] < values[i] && lengths[j] + 1 >= lengths[i]) {
+              lengths[i] = lengths[j] + 1;
+              parents[i] = j;
+            }
+          }
+
+          if (lengths[i] >= lengths[bestIndex]) {
+            bestIndex = i;
+          }
+        }
+
+        const valuesOut = [];
+        const indicesOut = [];
+        let current = bestIndex;
+
+        while (current !== -1) {
+          valuesOut.push(values[current]);
+          indicesOut.push(current);
+          current = parents[current];
+        }
+
+        valuesOut.reverse();
+        indicesOut.reverse();
+
+        return {
+          values: valuesOut,
+          indices: indicesOut,
+          lengths,
+          parents,
+          bestIndex
+        };
+      }
+
+      function findSequence(input) {
+        return computeLIS(input).values;
+      }
+
+      class AureliaLIS {
+        constructor() {
+          this.lastMeta = null;
+          this.codeMap = {};
+          this.toastTimer = null;
+        }
+
+        init() {
+          this.cacheElements();
+          this.populateCode();
+          this.bindEvents();
+          this.runTests();
+          this.compute(false);
+        }
+
+        cacheElements() {
+          this.sequenceForm = document.getElementById("sequenceForm");
+          this.sequenceInput = document.getElementById("sequenceInput");
+          this.sampleButton = document.getElementById("sampleButton");
+          this.copyResultButton = document.getElementById("copyResultButton");
+          this.resultOutput = document.getElementById("resultOutput");
+          this.viz = document.getElementById("viz");
+          this.status = document.getElementById("studioStatus");
+          this.testsBody = document.getElementById("testsBody");
+          this.toast = document.getElementById("toast");
+          this.downloadReadmeButton = document.getElementById("downloadReadme");
+          this.ctaForm = document.getElementById("ctaForm");
+          this.ctaEmail = document.getElementById("ctaEmail");
+          this.ctaStatus = document.getElementById("ctaStatus");
+        }
+
+        populateCode() {
+          this.codeMap = {
+            python: PYTHON_CODE,
+            typescript: TYPESCRIPT_CODE,
+            java: JAVA_CODE,
+            readme: generateREADME()
+          };
+
+          for (const [id, code] of Object.entries(this.codeMap)) {
+            const element = document.getElementById("code-" + id);
+            if (element) {
+              element.textContent = code;
+            }
+          }
+        }
+
+        bindEvents() {
+          this.sequenceForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            this.compute(true);
+          });
+
+          this.sampleButton.addEventListener("click", () => {
+            this.sequenceInput.value =
+              "[0, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]";
+            this.compute(true);
+          });
+
+          this.copyResultButton.addEventListener("click", () => {
+            this.copyResult();
+          });
+
+          document.querySelectorAll(".tab-button").forEach((button) => {
+            button.addEventListener("click", () => {
+              this.switchTab(button.dataset.tab);
+            });
+          });
+
+          document.querySelectorAll(".copy-code").forEach((button) => {
+            button.addEventListener("click", () => {
+              this.copyCode(button.dataset.copy);
+            });
+          });
+
+          document.querySelectorAll("[data-scroll]").forEach((button) => {
+            button.addEventListener("click", () => {
+              const target = document.querySelector(
+                button.getAttribute("data-scroll")
+              );
+              if (!target) return;
+
+              const reduceMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+              ).matches;
+              target.scrollIntoView({
+                behavior: reduceMotion ? "auto" : "smooth",
+                block: "start"
+              });
+            });
+          });
+
+          this.downloadReadmeButton.addEventListener("click", () => {
+            this.downloadReadme();
+          });
+
+          this.ctaForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            this.submitCta();
+          });
+        }
+
+        parseInput(raw) {
+          const text = String(raw ?? "").trim();
+
+          if (!text) {
+            return [];
+          }
+
+          let parsed = null;
+
+          try {
+            parsed = JSON.parse(text);
+          } catch {
+            parsed = null;
+          }
+
+          if (parsed !== null) {
+            if (!Array.isArray(parsed)) {
+              throw new Error("Input must be an array of finite numbers.");
+            }
+
+            return parsed.map((item, index) => {
+              if (
+                item === null ||
+                typeof item === "boolean" ||
+                typeof item === "object"
+              ) {
+                throw new Error(
+                  "Value at index " + index + " is not a finite number."
+                );
+              }
+
+              const value = Number(item);
+
+              if (!Number.isFinite(value)) {
+                throw new Error(
+                  "Value at index " + index + " is not a finite number."
+                );
+              }
+
+              return value;
+            });
+          }
+
+          const normalized = text.replace(/^\s*\[/, "").replace(/\]\s*$/, "");
+
+          return normalized
+            .split(/[\n,;]+/)
+            .map((part) => part.trim())
+            .filter(Boolean)
+            .map((part, index) => {
+              const value = Number(part);
+
+              if (!Number.isFinite(value)) {
+                throw new Error(
+                  "Value at position " + index + " is not a finite number."
+                );
+              }
+
+              return value;
+            });
+        }
+
+        compute(notify) {
+          try {
+            const values = this.parseInput(this.sequenceInput.value);
+            const meta = computeLIS(values);
+
+            this.lastMeta = meta;
+            this.resultOutput.textContent = JSON.stringify(meta.values);
+            this.renderVisualization(meta, values);
+
+            this.status.textContent = values.length
+              ? "Parsed " +
+                values.length +
+                " values. LIS length: " +
+                meta.values.length +
+                "."
+              : "Provide a non-empty numeric array.";
+
+            if (notify) {
+              this.toast("Sequence computed.");
+            }
+          } catch (error) {
+            this.lastMeta = null;
+            this.resultOutput.textContent = "[]";
+            this.viz.innerHTML = "";
+            this.status.textContent = error.message;
+            this.toast(error.message);
+          }
+        }
+
+        renderVisualization(meta, values) {
+          this.viz.innerHTML = "";
+
+          if (!Array.isArray(values) || values.length === 0) {
+            const empty = document.createElement("p");
+            empty.className = "status";
+            empty.textContent = "No sequence rendered.";
+            this.viz.appendChild(empty);
+            return;
+          }
+
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          const range = max - min || 1;
+          const selected = new Set(meta.indices);
+
+          values.forEach((value, index) => {
+            const bar = document.createElement("div");
+            bar.className = "bar";
+
+            const ratio = (value - min) / range;
+            const height = Math.max(10, Math.min(100, 12 + ratio * 88));
+            bar.style.height = height + "%";
+            bar.title = "index " + index + ", value " + value;
+
+            const label = document.createElement("span");
+            label.className = "bar-label";
+            label.textContent = value;
+
+            bar.appendChild(label);
+
+            if (selected.has(index)) {
+              bar.classList.add("lis");
+            }
+
+            this.viz.appendChild(bar);
+          });
+        }
+
+        switchTab(tabId) {
+          document.querySelectorAll(".tab-button").forEach((button) => {
+            const active = button.dataset.tab === tabId;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-selected", String(active));
+          });
+
+          document.querySelectorAll(".tab-panel").forEach((panel) => {
+            panel.classList.toggle("active", panel.id === "panel-" + tabId);
+          });
+        }
+
+        async copyText(text) {
+          try {
+            await navigator.clipboard.writeText(text);
+            this.toast("Copied to clipboard.");
+          } catch {
+            const helper = document.createElement("textarea");
+            helper.value = text;
+            helper.style.position = "fixed";
+            helper.style.opacity = "0";
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand("copy");
+            helper.remove();
+            this.toast("Copied to clipboard with fallback.");
+          }
+        }
+
+        copyResult() {
+          const text = this.resultOutput.textContent || "[]";
+          this.copyText(text);
+        }
+
+        copyCode(id) {
+          const text = this.codeMap[id] || "";
+          this.copyText(text);
+        }
+
+        downloadReadme() {
+          const content = generateREADME();
+          const blob = new Blob([content], {
+            type: "text/markdown;charset=utf-8"
+          });
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+
+          anchor.href = url;
+          anchor.download = "README.md";
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          this.toast("README downloaded.");
+        }
+
+        submitCta() {
+          if (!this.ctaForm.checkValidity()) {
+            this.ctaForm.reportValidity();
+            this.ctaStatus.textContent = "Enter a valid work email.";
+            return;
+          }
+
+          const email = this.ctaEmail.value.trim();
+          const key = "aurelia_waitlist";
+          const existing = JSON.parse(localStorage.getItem(key) || "[]");
+
+          existing.push({
+            email,
+            at: new Date().toISOString()
+          });
+
+          localStorage.setItem(key, JSON.stringify(existing));
+          this.ctaStatus.textContent =
+            "Access request captured locally. Connect a backend to persist it.";
+          this.ctaEmail.value = "";
+          this.toast("Access request captured.");
+        }
+
+        deepEqual(a, b) {
+          return JSON.stringify(a) === JSON.stringify(b);
+        }
+
+        runTests() {
+          const cases = [
+            {
+              name: "findSequence should be a function",
+              pass: typeof findSequence === "function",
+              expected: "function"
+            },
+            {
+              name: "findSequence([3, 10, 2, 1, 20]) should return an array",
+              pass: Array.isArray(findSequence([3, 10, 2, 1, 20])),
+              expected: "array"
+            },
+            {
+              name: "findSequence([3, 10, 2, 1, 20])",
+              input: [3, 10, 2, 1, 20],
+              expected: [3, 10, 20]
+            },
+            {
+              name: "findSequence([2, 7, 3, 5, 8])",
+              input: [2, 7, 3, 5, 8],
+              expected: [2, 3, 5, 8]
+            },
+            {
+              name: "findSequence([2, 6, 4, 5, 1])",
+              input: [2, 6, 4, 5, 1],
+              expected: [2, 4, 5]
+            },
+            {
+              name: "findSequence([10, 22, 9, 33, 21, 50, 60, 80])",
+              input: [10, 22, 9, 33, 21, 50, 60, 80],
+              expected: [10, 22, 33, 50, 60, 80]
+            },
+            {
+              name: "findSequence([0, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15])",
+              input: [0, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15],
+              expected: [0, 2, 6, 9, 11, 15]
+            }
+          ];
+
+          this.testsBody.innerHTML = "";
+
+          for (const testCase of cases) {
+            const row = document.createElement("tr");
+            const nameCell = document.createElement("td");
+            const expectedCell = document.createElement("td");
+            const statusCell = document.createElement("td");
+
+            let pass = false;
+
+            if (typeof testCase.pass === "boolean") {
+              pass = testCase.pass;
+            } else {
+              const actual = findSequence(testCase.input);
+              pass = this.deepEqual(actual, testCase.expected);
+            }
+
+            nameCell.textContent = testCase.name;
+            expectedCell.textContent = JSON.stringify(testCase.expected);
+            statusCell.textContent = pass ? "PASS" : "FAIL";
+            statusCell.className = pass ? "pass" : "fail";
+
+            row.appendChild(nameCell);
+            row.appendChild(expectedCell);
+            row.appendChild(statusCell);
+            this.testsBody.appendChild(row);
+          }
+        }
+
+        toast(message) {
+          if (!this.toast) return;
+
+          this.toast.textContent = message;
+          this.toast.classList.add("show");
+
+          if (this.toastTimer) {
+            clearTimeout(this.toastTimer);
+          }
+
+          this.toastTimer = setTimeout(() => {
+            this.toast.classList.remove("show");
+          }, 2600);
+        }
+      }
+
+      const app = new AureliaLIS();
+      app.init();
+    </script>
+  </body>
+</html>
